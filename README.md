@@ -31,7 +31,7 @@ format = """{
   'author': div#main-container div.section div.text p a:first-child $text,
   'twitter': div#main-container div.section div.text p a:nth-child(2) $[href]
 }"""
-data = xml2data.urlopen('http://hp.vector.co.jp/authors/VA038583/', format)
+data = xml2data.urlload('http://hp.vector.co.jp/authors/VA038583/', format)
 ```
 
 results:

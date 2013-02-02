@@ -8,7 +8,7 @@ from StringIO import StringIO
 import chardet
 
 
-def urlopen(url, format, param=None):
+def urlload(url, format, param=None):
     res = urllib2.urlopen(url, param)
     document = ''.join(res)
     encoding = res.info().get('charset')

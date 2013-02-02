@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from xml2data import urlopen, Parser
+from xml2data import urlload, Parser
 from minimock import mock, restore, Mock
 
 
@@ -27,7 +27,7 @@ class Xml2DataTestCase(unittest.TestCase):
     def unpatch_urllib2(self):
         restore()
 
-    def test_urlopen(self):
+    def test_urlload(self):
         self.patch_urllib2()
         
         url = 'http://hp.vector.co.jp/authors/VA038583/'
@@ -60,7 +60,7 @@ class Xml2DataTestCase(unittest.TestCase):
             'twitter': 'http://twitter.com/slaypni'
         }
 
-        data = urlopen(url=url, format=format)
+        data = urlload(url=url, format=format)
         self.assertEqual(data, answer)
 
         self.unpatch_urllib2()
