@@ -54,7 +54,7 @@ class Xml2DataTestCase(unittest.TestCase):
                       'url': './down/pawse032.zip',
                       'description': 'Pauseキーで、アプリケーションの一時停止、実行速度の制限が可能に'},
                      {'name': 'onAir', 'version': 'ver 1.2.0',
-                      'url':'./onair.html',
+                      'url': './onair.html',
                       'description': '現在放送中のテレビ番組のタイトルを一覧表示'}],
             'author': 'slay',
             'twitter': 'http://twitter.com/slaypni'
