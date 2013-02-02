@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.1.0'
+version = '0.1.0a'
 
 setup(name='xml2data',
       version=version,
@@ -69,7 +69,7 @@ results::
       author='slaypni',
       url='https://github.com/slaypni/xml2data',
       license='MIT',
-      packages=find_packages(exclude=['xml2data', 'xml2data.testsuite']),
+      packages=find_packages(exclude=['xml2data.testsuite']),
       test_suite='xml2data.testsuite.suite',
       include_package_data=True,
       zip_safe=False,
