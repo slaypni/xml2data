@@ -3,6 +3,7 @@
 import unittest
 from xml2data import urlload, load, loads, Parser
 from minimock import mock, restore, Mock
+from StringIO import StringIO
 
 
 class Xml2DataTestCase(unittest.TestCase):
@@ -10,7 +11,6 @@ class Xml2DataTestCase(unittest.TestCase):
     def patch_urllib2(self):
         class ResStub():
             def __init__(self):
-                from StringIO import StringIO
                 self.text = StringIO(_PUNILABO_HTML)
                 self.__iter__ = self.text.__iter__
                 self.next = self.text.next
@@ -27,47 +27,55 @@ class Xml2DataTestCase(unittest.TestCase):
     def unpatch_urllib2(self):
         restore()
 
+    url = 'http://hp.vector.co.jp/authors/VA038583/'
+    format = """
+        {'apps': [html body div#doc div#main-container div.section:first-child
+                 div.goods-container div.goods @ {
+            'name': div.top span.name $text,
+            'version': div.top span.version $text,
+            'url': div.top span.name h3 a $[href],
+            'description': div.goods div.bottom $text
+            }],
+         'author': html body div#doc div#main-container div.section div.text p a:first-child $text,
+         'twitter': html body div#doc div#main-container div.section div.text p a:nth-child(2) $[href]
+        }
+    """
+    answer = {
+        'apps': [{'name': 'copipex', 'version': 'ver 0.2.3', 
+                  'url': './down/copipex023.zip',
+                  'description': '<コピー⇒貼付け> が <マウスで範囲選択⇒クリック> で可能に'},
+                 {'name': 'gummi', 'version': 'ver 0.1.0', 
+                  'url': './gummi.html', 
+                  'description': 'ウィンドウの任意の部分を別窓に表示。操作も可能'},
+                 {'name': 'PAWSE', 'version': 'ver 0.3.2',
+                  'url': './down/pawse032.zip',
+                  'description': 'Pauseキーで、アプリケーションの一時停止、実行速度の制限が可能に'},
+                 {'name': 'onAir', 'version': 'ver 1.2.0',
+                  'url': './onair.html',
+                  'description': '現在放送中のテレビ番組のタイトルを一覧表示'}],
+        'author': 'slay',
+        'twitter': 'http://twitter.com/slaypni'
+    }
+
     def test_urlload(self):
         self.patch_urllib2()
-        
-        url = 'http://hp.vector.co.jp/authors/VA038583/'
-        format = """
-            {'apps': [html body div#doc div#main-container div.section:first-child
-                     div.goods-container div.goods @ {
-                'name': div.top span.name $text,
-                'version': div.top span.version $text,
-                'url': div.top span.name h3 a $[href],
-                'description': div.goods div.bottom $text
-                }],
-             'author': html body div#doc div#main-container div.section div.text p a:first-child $text,
-             'twitter': html body div#doc div#main-container div.section div.text p a:nth-child(2) $[href]
-            }
-        """
-        answer = {
-            'apps': [{'name': 'copipex', 'version': 'ver 0.2.3', 
-                      'url': './down/copipex023.zip',
-                      'description': '<コピー⇒貼付け> が <マウスで範囲選択⇒クリック> で可能に'},
-                     {'name': 'gummi', 'version': 'ver 0.1.0', 
-                      'url': './gummi.html', 
-                      'description': 'ウィンドウの任意の部分を別窓に表示。操作も可能'},
-                     {'name': 'PAWSE', 'version': 'ver 0.3.2',
-                      'url': './down/pawse032.zip',
-                      'description': 'Pauseキーで、アプリケーションの一時停止、実行速度の制限が可能に'},
-                     {'name': 'onAir', 'version': 'ver 1.2.0',
-                      'url': './onair.html',
-                      'description': '現在放送中のテレビ番組のタイトルを一覧表示'}],
-            'author': 'slay',
-            'twitter': 'http://twitter.com/slaypni'
-        }
 
-        data = urlload(url, format)
-        self.assertEqual(data, answer)
-
-        data = load(_PUNILABO_HTML, format)
-        self.assertEqual(data, answer)
+        data = urlload(self.url, self.format)
+        self.assertEqual(data, self.answer)
 
         self.unpatch_urllib2()
 
+    def test_load(self):
+        data = load(StringIO(_PUNILABO_HTML), self.format)
+        self.assertEqual(data, self.answer)
+
+    def test_loads(self):
+        data = loads(_PUNILABO_HTML, self.format)
+        self.assertEqual(data, self.answer)
+
+        data = loads(_PUNILABO_HTML.decode('shift-jis'), self.format)
+        self.assertEqual(data, self.answer)
+        
 
 class ParserTestCase(unittest.TestCase):
 
