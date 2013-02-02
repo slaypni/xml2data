@@ -7,7 +7,7 @@ setup(name='xml2data',
       version=version,
       description="a library for converting xml into native data",
       long_description='''\
-xml2data is a library for converting xml into native data, according to css-like format.
+xml2data is a library for converting xml into native data, according to css-selector like format.
 
 Requirements
 ------------

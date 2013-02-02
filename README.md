@@ -1,7 +1,7 @@
 xml2data
 ========
 
-xml2data is a Python library for converting xml into native data, according to css-like format.
+xml2data is a Python library for converting xml into native data, according to css-selector like format.
 
 Requirements
 ------------
