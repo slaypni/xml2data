@@ -1,44 +1,43 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from xml2data import Xml2Data, Parser
+from xml2data import urlopen, Parser
 
 
 class Xml2DataTestCase(unittest.TestCase):
 
-    @unittest.expectedFailure
-    def test_xml2data(self):
+    def test_urlopen(self):
         url = 'http://hp.vector.co.jp/authors/VA038583/'
         format = """
-            {'apps': [html body div#doc div#main-container div.section
-                     div#goods-container div.goods @ {
+            {'apps': [html body div#doc div#main-container div.section:first-child
+                     div.goods-container div.goods @ {
                 'name': div.top span.name $text,
                 'version': div.top span.version $text,
-                'url': html body div#doc div#main-container div.section div#goods-container div.goods div.top span.name h3 a $[href],
+                'url': div.top span.name h3 a $[href],
                 'description': div.goods div.bottom $text
                 }],
-             'author': html body div#doc div#main-container div.section div.text p a:first-child $text
+             'author': html body div#doc div#main-container div.section div.text p a:first-child $text,
              'twitter': html body div#doc div#main-container div.section div.text p a:nth-child(2) $[href]
             }
         """
         answer = {
             'apps': [{'name': 'copipex', 'version': 'ver 0.2.3', 
-                      'url': 'http://hp.vector.co.jp/authors/VA038583/down/copipex023.zip',
-                      'description': u'<コピー⇒貼付け> が <マウスで範囲選択⇒クリック> で可能に'},
+                      'url': './down/copipex023.zip',
+                      'description': '<コピー⇒貼付け> が <マウスで範囲選択⇒クリック> で可能に'},
                      {'name': 'gummi', 'version': 'ver 0.1.0', 
-                      'url': 'http://hp.vector.co.jp/authors/VA038583/gummi.html', 
-                      'description': u'ウィンドウの任意の部分を別窓に表示。操作も可能 '},
+                      'url': './gummi.html', 
+                      'description': 'ウィンドウの任意の部分を別窓に表示。操作も可能'},
                      {'name': 'PAWSE', 'version': 'ver 0.3.2',
-                      'url': 'http://hp.vector.co.jp/authors/VA038583/down/pawse032.zip',
-                      'description': u'Pauseキーで、アプリケーションの一時停止、実行速度の制限が可能に'},
+                      'url': './down/pawse032.zip',
+                      'description': 'Pauseキーで、アプリケーションの一時停止、実行速度の制限が可能に'},
                      {'name': 'onAir', 'version': 'ver 1.2.0',
-                      'url':'http://hp.vector.co.jp/authors/VA038583/onair.html',
-                      'description': u'現在放送中のテレビ番組のタイトルを一覧表示'}],
+                      'url':'./onair.html',
+                      'description': '現在放送中のテレビ番組のタイトルを一覧表示'}],
             'author': 'slay',
             'twitter': 'http://twitter.com/slaypni'
         }
 
-        data = Xml2Data(url=url, format=format).data()
+        data = urlopen(url=url, format=format)
         self.assertEqual(data, answer)
 
 

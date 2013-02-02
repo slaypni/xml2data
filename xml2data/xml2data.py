@@ -3,38 +3,31 @@
 
 from lxml import etree, cssselect
 import urllib2
-from socket import _GLOBAL_DEFAULT_TIMEOUT
 import re
+from StringIO import StringIO
+import chardet
 
 
-class Xml2Data:
-
-    def __init__(self, url=None, param=None, format=None):
-        self.xml = None
-        self.url = url
-        self.param = param
-        self.format = format
-        self.timeout = _GLOBAL_DEFAULT_TIMEOUT
-
-    def data(self):
-        if self.xml is None:
-            self._load()
-            if self.xml is None:
-                return None
-
-    def _load(self):
-        content = urllib2.urlopen(self.url, self.param, self.timeout)
-        self.xml = etree.parse(content)
+def urlopen(url, format, param=None):
+    res = urllib2.urlopen(url, param)
+    document = ''.join(res)
+    encoding = res.info().get('charset')
+    if encoding is None:
+        encoding = chardet.detect(document)['encoding']
+    document = document.decode(encoding)
+    return Parser.parse(format, document)
 
 
 class Parser:
 
     @classmethod
     def parse(cls, format, document=None):
-        xml = etree.fromstring(document) if document is not None else None
+        xml = document
+        if xml is not None and not isinstance(xml, etree.ElementBase):
+            xml = etree.parse(StringIO(document), etree.HTMLParser())
         r = cls._parse(format, xml)
         (d, c) = r
-        if c.lstrip() != '':
+        if c.lstrip() != '': # if non-parsed data remain
             raise Xml2DataSyntaxError()
         return d
 
@@ -81,7 +74,7 @@ class Parser:
     @classmethod
     def _parse_num(cls, content):
         c = content.lstrip()
-        m = re.match('[\-\+]?\d+', c)
+        m = re.match(r'[\-\+]?\d+', c)
         if m is None:
             raise Xml2DataSyntaxError()
         return (int(m.group()), c[m.end():])
@@ -212,11 +205,13 @@ class Parser:
         r = None
         if elem is not None:
             if func == 'text':
+                r = etree.tostring(elem, method='text', with_tail=False, encoding='utf-8')
+            elif func == 'immediate_text':
                 r = elem.text
             elif func == 'html':
-                r = etree.tostring(elem)
+                r = etree.tostring(elem, with_tail=False, encoding='utf-8')
             else:
-                m = re.match('\[\s*(?P<attr>\w+)\s*\]', func)
+                m = re.match(r'\[\s*(?P<attr>\w+)\s*\]', func)
                 if m is not None:
                     r = elem.get(m.group('attr'))
             if r is not None:

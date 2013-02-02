@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-__all__ = ['Xml2Data']
+__all__ = ['urlopen']
 
 
-from .xml2data import Xml2Data, Parser
+from .xml2data import urlopen, Parser
