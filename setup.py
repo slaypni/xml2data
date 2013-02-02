@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from setuptools import setup, find_packages
 import sys, os
 
@@ -6,7 +8,7 @@ version = '0.1.0'
 setup(name='xml2data',
       version=version,
       description="a library for converting xml into native data",
-      long_description='''\
+      long_description=u'''\
 xml2data is a library for converting xml into native data, according to css-selector like format.
 
 Requirements
@@ -55,10 +57,16 @@ results::
     'twitter': 'http://twitter.com/slaypni'
   }
       ''',
-      classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+      classifiers=[
+          'Development Status :: 4 - Beta',
+          'License :: OSI Approved :: MIT License',
+          'Operating System :: OS Independent',
+          'Programming Language :: Python :: 2.7',
+          'Topic :: Text Processing :: Markup :: HTML',
+          'Topic :: Text Processing :: Markup :: XML'
+      ], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
       keywords='xml html',
       author='slaypni',
-      author_email='punigumi@gmail.com',
       url='https://github.com/slaypni/xml2data',
       license='MIT',
       packages=find_packages(exclude=['xml2data', 'xml2data.testsuite']),
