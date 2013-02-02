@@ -18,6 +18,17 @@ def urlload(url, format, param=None):
     return Parser.parse(format, document)
 
 
+def load(s, format):
+    return loads(''.join(s), format)
+
+
+def loads(s, format):
+    if isinstance(s, str):
+        encoding = chardet.detect(s)['encoding']
+        s = s.decode(encoding)
+    return Parser.parse(format, s)
+
+
 class Parser:
 
     @classmethod

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from xml2data import urlload, Parser
+from xml2data import urlload, load, loads, Parser
 from minimock import mock, restore, Mock
 
 
@@ -60,7 +60,10 @@ class Xml2DataTestCase(unittest.TestCase):
             'twitter': 'http://twitter.com/slaypni'
         }
 
-        data = urlload(url=url, format=format)
+        data = urlload(url, format)
+        self.assertEqual(data, answer)
+
+        data = load(_PUNILABO_HTML, format)
         self.assertEqual(data, answer)
 
         self.unpatch_urllib2()
