@@ -38,7 +38,7 @@ class Parser:
             xml = etree.parse(StringIO(document), etree.HTMLParser())
         r = cls._parse(format, xml)
         (d, c) = r
-        if c.lstrip() != '': # if non-parsed data remain
+        if c.lstrip() != '':  # if non-parsed data remain
             raise Xml2DataSyntaxError()
         return d
 
@@ -166,9 +166,8 @@ class Parser:
                     pos_br = c_.find(']', i + 1)
                     j = pos_br
                     if pos_eq != -1 and pos_eq < pos_br:
-                        r = cls._parse_str(c_[pos_eq + 1:])
-                        j = r[1]
-                    i = c_.find(']', j) # end position of a bracket inside css-selector
+                        (_, j) = cls._parse_str(c_[pos_eq + 1:])
+                    i = c_.find(']', j)  # end position of a bracket inside css-selector
                     if i == -1:
                         raise Xml2DataSyntaxError()
                 elif a == ']' or a == ',' or a == '}':

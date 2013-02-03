@@ -2,7 +2,7 @@
 
 import unittest
 from xml2data import urlload, load, loads, Parser
-from minimock import mock, restore, Mock
+from minimock import restore, Mock
 from StringIO import StringIO
 
 
@@ -19,7 +19,7 @@ class Xml2DataTestCase(unittest.TestCase):
                 return {
                     'Content-Type': 'text/html'
                 }
-                
+
         import urllib2
         urllib2.urlopen = Mock('urllib2.urlopen')
         urllib2.urlopen.mock_returns = ResStub()
@@ -75,7 +75,7 @@ class Xml2DataTestCase(unittest.TestCase):
 
         data = loads(_PUNILABO_HTML.decode('shift-jis'), self.format)
         self.assertEqual(data, self.answer)
-        
+
 
 class ParserTestCase(unittest.TestCase):
 
@@ -133,7 +133,7 @@ class ParserTestCase(unittest.TestCase):
                 </body>
             </html>"""
         self.assertEqual(Parser.parse('div#caption $text', html), 'abc')
-        self.assertEqual(Parser.parse('div#caption', html), 'abc') # abbreviation
+        self.assertEqual(Parser.parse('div#caption', html), 'abc')  # abbreviation
         self.assertEqual(Parser.parse('[div#catalog div.app @ a $text]', html),
                          ['FireFox', 'Safari'])
         self.assertEqual(Parser.parse('[div#catalog div.app @ [ul.os li @ $text]]', html), 
