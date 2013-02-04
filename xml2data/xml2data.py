@@ -11,8 +11,13 @@ import chardet
 def urlload(url, format, param=None):
     res = urllib2.urlopen(url, param)
     document = ''.join(res)
-    encoding = res.info().get('charset') or chardet.detect(document)['encoding']
-    document = document.decode(encoding)
+    encoding = ''
+    ct = res.info().get('Content-Type')
+    if ct is not None:
+        m = re.search(r';\s*charset=[\'\"]?(?P<encoding>\S+?)[\'\"]?\s*$', ct)
+        encoding = m.group('encoding') if m is not None else ''
+    encoding = encoding or chardet.detect(document)['encoding']
+    document = document.decode(encoding, 'ignore')
     return Parser.parse(format, document)
 
 
@@ -214,7 +219,7 @@ class Parser:
             elif func == 'html':
                 r = etree.tostring(elem, with_tail=False, encoding='utf-8')
             else:
-                m = re.match(r'\[\s*(?P<attr>\w+)\s*\]', func)
+                m = re.match(r'\[\s*(?P<attr>\S+)\s*\]', func)
                 if m is not None:
                     r = elem.get(m.group('attr'))
             if r is not None:
