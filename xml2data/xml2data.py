@@ -11,9 +11,7 @@ import chardet
 def urlload(url, format, param=None):
     res = urllib2.urlopen(url, param)
     document = ''.join(res)
-    encoding = res.info().get('charset')
-    if encoding is None:
-        encoding = chardet.detect(document)['encoding']
+    encoding = res.info().get('charset') or chardet.detect(document)['encoding']
     document = document.decode(encoding)
     return Parser.parse(format, document)
 
@@ -36,8 +34,7 @@ class Parser:
         xml = document
         if xml is not None and not isinstance(xml, etree.ElementBase):
             xml = etree.parse(StringIO(document), etree.HTMLParser())
-        r = cls._parse(format, xml)
-        (d, c) = r
+        (d, c) = cls._parse(format, xml)
         if c.lstrip() != '':  # if non-parsed data remain
             raise Xml2DataSyntaxError()
         return d
@@ -52,10 +49,9 @@ class Parser:
                   lambda c_: cls._parse_dict(c_, xml),) + (
                   (lambda c_: cls._parse_selector(c_, xml),) if xml is not None else ()):
             try:
-                r = f(c)
+                return f(c)
             except Xml2DataSyntaxError:
                 continue
-            return r
         raise Xml2DataSyntaxError()
 
     @classmethod
@@ -100,16 +96,14 @@ class Parser:
         d = {}
         c = c[1:].lstrip()
         while c[0] != '}':
-            r = cls._parse(c, *args)
-            (k, c) = r
+            (k, c) = cls._parse(c, *args)
 
             c = c.lstrip()
             if c[0] != ':':
                 raise Xml2DataSyntaxError()
 
             c = c[1:].lstrip()
-            r = cls._parse(c, *args)
-            (v, c) = r
+            (v, c) = cls._parse(c, *args)
 
             c = c.lstrip()
             if not (c[0] == ',' or c[0] == '}'):
@@ -137,8 +131,7 @@ class Parser:
         d = []
         c = c[1:].lstrip()
         while c[0] != ']':
-            r = cls._parse(c, *args)
-            (v, c) = r
+            (v, c) = cls._parse(c, *args)
 
             c = c.lstrip()
             if not (c[0] == ',' or c[0] == ']'):
