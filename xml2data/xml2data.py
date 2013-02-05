@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 
-from lxml import etree, cssselect
 import urllib2
 import re
 from StringIO import StringIO
+
+from lxml import etree, cssselect
 import chardet
 
 
@@ -233,4 +234,3 @@ class Xml2DataSyntaxError(SyntaxError):
 
 if __name__ == '__main__':
     pass
-    

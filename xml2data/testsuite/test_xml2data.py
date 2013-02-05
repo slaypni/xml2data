@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
+
 import unittest
-from xml2data import urlload, load, loads, Parser
-from minimock import restore, Mock
 from StringIO import StringIO
+
+from minimock import restore, Mock
+
+from xml2data import urlload, load, loads, Parser
 
 
 class Xml2DataTestCase(unittest.TestCase):
