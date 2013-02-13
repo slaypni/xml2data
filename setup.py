@@ -9,7 +9,7 @@ setup(name='xml2data',
       version=version,
       description="a library for converting xml into native data",
       long_description=u'''\
-xml2data is a library for converting xml into native data, according to css-selector like format.
+xml2data is a library for converting xml into native data, according to css-selector like template.
 
 Requirements
 ------------
@@ -22,7 +22,7 @@ Example
 the following converts `a webpage <http://hp.vector.co.jp/authors/VA038583/>`_ containing some app information::
 
   import xml2data
-  format = """{
+  template = """{
     'apps': [div#main-container div.section:first-child div.goods-container div.goods @ {
         'name': div.top span.name,
         'url': div.top span.name a $[href],
@@ -31,7 +31,7 @@ the following converts `a webpage <http://hp.vector.co.jp/authors/VA038583/>`_ c
     'author': div#main-container div.section div.text p a:first-child $text,
     'twitter': div#main-container div.section div.text p a:nth-child(2) $[href]
   }"""
-  data = xml2data.urlload('http://hp.vector.co.jp/authors/VA038583/', format)
+  data = xml2data.urlload('http://hp.vector.co.jp/authors/VA038583/', template)
 
 results::
 
