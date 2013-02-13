@@ -31,7 +31,7 @@ class Xml2DataTestCase(unittest.TestCase):
         restore()
 
     url = 'http://hp.vector.co.jp/authors/VA038583/'
-    format = """
+    template = """
         {'apps': [html body div#doc div#main-container div.section:first-child
                  div.goods-container div.goods @ {
             'name': div.top span.name $text,
@@ -63,20 +63,20 @@ class Xml2DataTestCase(unittest.TestCase):
     def test_urlload(self):
         self.patch_urllib2()
 
-        data = urlload(self.url, self.format)
+        data = urlload(self.url, self.template)
         self.assertEqual(data, self.answer)
 
         self.unpatch_urllib2()
 
     def test_load(self):
-        data = load(StringIO(_PUNILABO_HTML), self.format)
+        data = load(StringIO(_PUNILABO_HTML), self.template)
         self.assertEqual(data, self.answer)
 
     def test_loads(self):
-        data = loads(_PUNILABO_HTML, self.format)
+        data = loads(_PUNILABO_HTML, self.template)
         self.assertEqual(data, self.answer)
 
-        data = loads(_PUNILABO_HTML.decode('shift-jis'), self.format)
+        data = loads(_PUNILABO_HTML.decode('shift-jis'), self.template)
         self.assertEqual(data, self.answer)
 
 

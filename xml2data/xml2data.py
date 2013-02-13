@@ -9,7 +9,7 @@ from lxml import etree, cssselect
 import chardet
 
 
-def urlload(url, format, param=None):
+def urlload(url, template, param=None):
     res = urllib2.urlopen(url, param)
     document = ''.join(res)
     encoding = ''
@@ -19,35 +19,35 @@ def urlload(url, format, param=None):
         encoding = m.group('encoding') if m is not None else ''
     encoding = encoding or chardet.detect(document)['encoding']
     document = document.decode(encoding, 'ignore')
-    return Parser.parse(format, document)
+    return Parser.parse(template, document)
 
 
-def load(s, format):
-    return loads(''.join(s), format)
+def load(s, template):
+    return loads(''.join(s), template)
 
 
-def loads(s, format):
+def loads(s, template):
     if isinstance(s, str):
         encoding = chardet.detect(s)['encoding']
         s = s.decode(encoding)
-    return Parser.parse(format, s)
+    return Parser.parse(template, s)
 
 
 class Parser:
 
     @classmethod
-    def parse(cls, format, document=None):
+    def parse(cls, template, document=None):
         xml = document
         if xml is not None and not isinstance(xml, etree.ElementBase):
             xml = etree.parse(StringIO(document), etree.HTMLParser())
-        (d, c) = cls._parse(format, xml)
+        (d, c) = cls._parse(template, xml)
         if c.lstrip() != '':  # if non-parsed data remain
             raise Xml2DataSyntaxError()
         return d
 
     @classmethod
     def _parse(cls, content, xml=None):
-        """ parse a given content of the format.
+        """ parse a given content of the template.
             it returns a tuple (parsed data, remaining content).
         """
         c = content.lstrip()
