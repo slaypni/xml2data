@@ -165,7 +165,8 @@ class Parser:
                     pos_br = c_.find(']', i + 1)
                     j = pos_br
                     if pos_eq != -1 and pos_eq < pos_br:
-                        (_, j) = cls._parse_str(c_[pos_eq + 1:])
+                        (_, r) = cls._parse_str(c_[pos_eq + 1:])
+                        j = length - len(r)
                     i = c_.find(']', j)  # end position of a bracket inside css-selector
                     if i == -1:
                         raise Xml2DataSyntaxError()
@@ -202,7 +203,7 @@ class Parser:
         c = c[:end] if end != -1 else c
         func_index = c.find('$')
         func = c[func_index + 1:].strip() if func_index != -1 else 'text'
-        s = c[:func_index].lstrip() if func_index != -1 else c
+        s = c[:func_index].lstrip() if func_index != -1 else c.lstrip()
         elem = xml
         if len(s) > 0:
             sel = cssselect.CSSSelector(s)
