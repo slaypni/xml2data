@@ -6,7 +6,7 @@ xml2data is a Python library for converting xml into native data, according to c
 Requirements
 ------------
 
-Python 2.x
+Python 2.7
 
 
 Install

@@ -14,7 +14,7 @@ xml2data is a library for converting xml into native data, according to css-sele
 Requirements
 ------------
 
-Python 2.x
+Python 2.7
 
 Example
 -------
