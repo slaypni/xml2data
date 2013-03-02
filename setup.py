@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.1.0a'
+version = '0.1.0'
 
 setup(name='xml2data',
       version=version,
@@ -58,7 +58,6 @@ results::
   }
       ''',
       classifiers=[
-          'Development Status :: 4 - Beta',
           'License :: OSI Approved :: MIT License',
           'Operating System :: OS Independent',
           'Programming Language :: Python :: 2.7',
